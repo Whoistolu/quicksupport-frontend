@@ -22,12 +22,18 @@ export default function TicketList() {
       <h1 className="text-2xl font-bold mb-6">Support Tickets</h1>
       <ul className="space-y-4">
         {data.tickets.map((ticket) => (
-          <li key={ticket.id} className="bg-gray-100 p-4 rounded shadow">
-            <Link to={`/tickets/${ticket.id}`} className="text-lg font-medium text-blue-600">
-              {ticket.subject}
+          <li
+            key={ticket.id}
+            className="bg-white p-4 rounded-lg shadow hover:shadow-md transition duration-200"
+            >
+            <Link
+                to={`/tickets/${ticket.id}`}
+                className="block text-xl font-semibold text-blue-600 hover:underline"
+            >
+                {ticket.subject}
             </Link>
-            <p className="text-sm text-gray-600">Status: {ticket.status}</p>
-          </li>
+            <p className="text-sm text-gray-600 mt-1">Status: {ticket.status}</p>
+            </li>
         ))}
       </ul>
     </div>
