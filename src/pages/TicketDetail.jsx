@@ -23,30 +23,57 @@ export default function TicketDetail() {
   const { id } = useParams();
   const { data, loading, error } = useQuery(GET_TICKET, { variables: { id } });
 
-  if (loading) return <p>Loading ticket...</p>;
-  if (error) return <p>Error loading ticket</p>;
+  if (loading) {
+    return (
+      <div className="p-6 max-w-3xl mx-auto">
+        <p className="text-gray-500 animate-pulse">Loading ticket...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6 max-w-3xl mx-auto">
+        <p className="text-red-600 font-medium">⚠️ Error loading ticket. Please try again.</p>
+      </div>
+    );
+  }
 
   const { ticket } = data;
 
   return (
-    <div className="p-4 sm:p-6 max-w-3xl mx-auto">
-        <div className="p-8 max-w-2xl mx-auto">
-        <h1 className="text-2xl font-bold mb-2">{ticket.subject}</h1>
-        <p className="text-gray-700 mb-4">{ticket.description}</p>
-        <p className="text-sm text-gray-600 mb-6">Status: {ticket.status}</p>
+    <div className="p-6 max-w-3xl mx-auto space-y-8">
+      <div className="bg-white p-6 rounded-xl shadow-md">
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">{ticket.subject}</h1>
+        <p className="text-gray-700 leading-relaxed mb-4">{ticket.description}</p>
+        <span className="inline-block px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-700 font-medium">
+          Status: {ticket.status}
+        </span>
+      </div>
 
-        <h2 className="text-xl font-semibold mb-2">Comments</h2>
-        <ul className="space-y-3 mb-6">
-            {ticket.comments.map((c) => (
-            <li key={c.id} className="p-3 bg-white rounded shadow">
-                <p className="text-gray-800">{c.body}</p>
-                <p className="text-sm text-gray-500">— {c.user.name}</p>
-            </li>
+      <div className="bg-gray-50 p-6 rounded-xl shadow-sm">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Comments</h2>
+        {ticket.comments.length === 0 ? (
+          <p className="text-gray-500 italic">No comments yet.</p>
+        ) : (
+          <ul className="space-y-4">
+            {ticket.comments.map((comment) => (
+              <li
+                key={comment.id}
+                className="bg-white p-4 rounded-lg shadow-sm border border-gray-200"
+              >
+                <p className="text-gray-800 mb-1">{comment.body}</p>
+                <p className="text-sm text-gray-500">— {comment.user.name}</p>
+              </li>
             ))}
-        </ul>
+          </ul>
+        )}
+      </div>
 
+      <div className="bg-white p-6 rounded-xl shadow-md">
+        <h3 className="text-lg font-semibold text-gray-800 mb-3">Add a Comment</h3>
         <AddCommentForm ticketId={id} />
-        </div>
+      </div>
     </div>
   );
 }
